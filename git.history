@@ -1,0 +1,4 @@
+init
+add .
+stage .
+commit -m "initial commit"
