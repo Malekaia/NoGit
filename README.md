@@ -14,11 +14,11 @@ A simple python script to prevent the unnecessary repetition of the "git" keywor
 
 ### Example commands:
 
-  * `init`
-  * `add .`
-  * `stage .`
-  * `commit -m "inital commit"`
-  * `%run; %exit`
+  1. `init`
+  2. `add .`
+  3. `stage .`
+  4. `commit -m "inital commit"`
+  5. `%run; %exit`
 
 ### Additional information (for Linux users):
 
