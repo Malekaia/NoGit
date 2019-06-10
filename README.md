@@ -1,5 +1,5 @@
 # NoGit
-A simple python script to prevent the unnecessary repetition of the "git" keyword.
+A simple python script to prevent the unnecessary repetition of the "git" keyword, made in response to [this question](https://stackoverflow.com/q/56505000/10415695) and ported from [this answer](https://stackoverflow.com/a/56528842/10415695).
 
 
 ### Documentation:
