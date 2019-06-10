@@ -10,15 +10,15 @@ A simple python script to prevent the unnecessary repetition of the "git" keywor
   * pressing `ctr+c` is the same as running `%run; %exit`
   * the script saves commands that were executed to a file called `git.history` in the same folder as the script
   * you can add multiple commands in one line using a semi-colon
-  * you can use the keyword `git` in the beginning of the command and the script won't duplicate it (**E.G:** `git git`)
+  * you can use the keyword `git` in the beginning of the command and the script won't duplicate it (**E.G:** `git init` doesn't become `git git init`)
 
 ### Example commands:
 
-  * init
-  * add .
-  * stage .
-  * commit -m "inital commit"
-  * %run; %exit
+  * `init`
+  * `add .`
+  * `stage .`
+  * `commit -m "inital commit"`
+  * `%run; %exit`
 
 ### Additional information (for Linux users):
 
