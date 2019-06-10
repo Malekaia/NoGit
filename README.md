@@ -20,7 +20,7 @@ A simple python script to prevent the unnecessary repetition of the "git" keywor
   * commit -m "inital commit"
   * %run; %exit
 
-### Additional information for Linux users:
+### Additional information (for Linux users):
 
 If you want you can remove the `.py` extension and convert it into an executable using:
 
@@ -35,16 +35,20 @@ You'd run this instead:
 
     ./git
 
-### Additional information for lazy people:
+### Additional information (for lazy people):
 
 If you're really lazy and don't want to type out a `./` then you could move this script to your `/bin/` folder and create an alias for it.
 
-If you're *really, __really__ lazy* use the following commands:
+If you're *really, __really__* lazy, just use the following commands:
 
     sudo cp ./git /bin/nogit
     sudo chmod +x /bin/nogit
     alias nogit='/bin/nogit'
 
-If you're *really, really, __really__* lazy just copy and paste the following line:
+If you're *really, really, __really__* lazy, just copy and paste the following one-liner:
 
     sudo cp ./git /bin/nogit && sudo chmod +x /bin/nogit && alias nogit='/bin/nogit'
+
+If you're laziness has reached levels previously unknown to mankind, here is a more compact version of the same one-liner:
+
+    sudo cp ./git /bin/nogit;sudo chmod +x /bin/nogit;alias nogit='/bin/nogit'
