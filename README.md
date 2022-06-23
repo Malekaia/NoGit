@@ -45,4 +45,4 @@ git /bin/nogit && sudo chmod +x /bin/nogit && alias nogit='/bin/nogit'
 ```
 
 ## More information:
-To read the full article, visit: [How to avoid retyping the "Git" keyword](https://logicalbranch.github.io/articles/Git/how-to-avoid-retyping-the-git-keyword.html).
+You can find the full article at [How to avoid retyping the "Git" keyword](https://logicalbranch.github.io/articles/Git/how-to-avoid-retyping-the-git-keyword.html), and the source code at [nogit.py](https://github.com/LogicalBranch/NoGit/blob/master/nogit.py).
