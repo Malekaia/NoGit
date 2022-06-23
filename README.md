@@ -1,9 +1,48 @@
-<article class="col-12 col-lg-9" id="blog-article"><h3 class="text-title">Information:</h3><p><a href="https://github.com/LogicalBranch/NoGit">NoGit</a> is a Python script that prevents the unnecessary repetition of the git keyword. It opens a shell CLI where you can input git commands without typing the <code>git</code> keyword before every instruction. I wrote this script as <a href="https://stackoverflow.com/a/56528842/10415695">an answer</a> to <a href="https://stackoverflow.com/q/56505000/10415695">a question</a> on StackOverflow.</p><p>After calling ./nogit, a CLI (similar to the <a href="https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-commands.html">MySQL shell</a>) should appear:</p><pre lang="shell">git&gt;
-</pre><p><b>Note</b>: Given that NoGit is a wrapper around Git, it provides all of the features of the <a href="https://git-scm.com/">Git VCS</a>.</p><h3 class="text-title">Documentation:</h3><ul><li><code>%undo</code> deletes the last command from the stack</li><li><code>%run</code> executes all commands in the stack and deletes it when done</li><li><code>%exit</code> closes the CLI without doing anything</li><li><code>ctrl+c</code> has the same effect as  executing <code>%run; %exit</code> or <code>%run</code> and <code>%exit</code></li><li>Command history gets saved to a file called <code>nogit.history</code> in the same folder as the script</li><li>You can add multiple commands in one line using a semi-colon</li><li>You can use the <code>git</code> keyword because the script doesn't add the <code>git</code> keyword if it already exists</li></ul><h3 class="text-title">Demonstration:</h3><ol><li><code>init</code></li><li><code>add -A</code></li><li><code>stage -A</code></li><li><code>status</code></li><li><code>commit -m "initial commit"</code></li><li><code>%run; %exit</code></li></ol><h3 class="text-title">Installation:</h3><p>To run NoGit, you need <a href="https://www.python.org/downloads/">Python 3</a> installed on your system. You can download it from the official <a href="https://github.com/LogicalBranch/NoGit">Github Repository</a> or copy the source code below.</p><p><b>Note</b>: The script depends on the <a href="https://docs.python.org/3/library/sys.html">sys</a>, <a href="https://docs.python.org/3/library/os.html">os</a>, <a href="https://docs.python.org/3/library/signal.html">signal</a>, <a href="https://docs.python.org/3/library/atexit.html">atexit</a>, <a href="https://docs.python.org/3/library/readline.html">readline</a> and <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a> modules.</p><h3 class="text-title">Installation notes (Linux):</h3><p>If you want you can remove the <code>.py</code> extension and convert it into an executable:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">mv</span> nogit.py nogit
-<span class="token function">chmod</span> +x ./nogit
-./nogit <span class="token comment"># open the NoGit CLI</span>
-</code></pre><p>You can also move this script to your <code>./bin/</code> directory and create an alias for it to run it without a <code>./</code>:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">cp</span> ./nogit /bin/nogit
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit
-<span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">"/bin/nogit"</span>
-</code></pre><p>Alternatively you can copy the following command into your CLI:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">cp</span> ./nogit /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">'/bin/nogit'</span>
-</code></pre>
+<h3>Documentation:</h3>
+<ul>
+  <li><code>%undo</code> deletes the last command from the stack</li>
+  <li><code>%run</code> executes all commands in the stack and deletes it when done</li>
+  <li><code>%exit</code> closes the CLI without doing anything</li>
+  <li><code>ctrl+c</code> has the same effect as executing <code>%run; %exit</code> or <code>%run</code> and <code>%exit</code></li>
+  <li>Command history gets saved to a file called <code>nogit.history</code> in the same folder as the script</li>
+  <li>You can add multiple commands in one line using a semi-colon</li>
+  <li>You can use the <code>git</code> keyword because the script doesn't add the <code>git</code> keyword if it already exists</li>
+</ul>
+
+<h3>Demonstration:</h3>
+
+<ol>
+  <li><code>init</code></li>
+  <li><code>add -A</code></li>
+  <li><code>stage -A</code></li>
+  <li><code>status</code></li>
+  <li><code>commit -m "initial commit"</code></li>
+  <li><code>%run; %exit</code></li>
+</ol>
+
+<h3>Installation:</h3>
+<p>To run NoGit, you need <a href="https://www.python.org/downloads/">Python 3</a> installed on your system. You can download it from the official <a href="https://github.com/LogicalBranch/NoGit">Github Repository</a> or copy the source code below.</p>
+<p><b>Note</b>: The script depends on the <a href="https://docs.python.org/3/library/sys.html">sys</a>, <a href="https://docs.python.org/3/library/os.html">os</a>, <a href="https://docs.python.org/3/library/signal.html">signal</a>, <a href="https://docs.python.org/3/library/atexit.html">atexit</a>, <a href="https://docs.python.org/3/library/readline.html">readline</a> and <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a> modules.</p>
+
+<h3>Installation notes (Linux):</h3>
+<p>If you want you can remove the <code>.py</code> extension and convert it into an executable:</p>
+
+```shell
+mv nogit.py nogit
+chmod +x ./nogit
+./nogit # open the NoGit CLI
+```
+
+<p>You can also move this script to your <code>./bin/</code> directory and create an alias for it to run it without a <code>./</code>:</p>
+
+```shell
+sudo cp ./nogit /bin/nogit
+sudo chmod +x /bin/nogit
+alias nogit="/bin/nogit"
+```
+
+<p>Alternatively you can copy the following command into your CLI:</p>
+
+```shell
+git /bin/nogit && sudo chmod +x /bin/nogit && alias nogit='/bin/nogit'
+```
