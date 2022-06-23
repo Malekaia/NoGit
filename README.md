@@ -6,41 +6,4 @@
 <span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit
 <span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">"/bin/nogit"</span>
 </code></pre><p>Alternatively you can copy the following command into your CLI:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">cp</span> ./nogit /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">'/bin/nogit'</span>
-</code></pre><h3 class="text-title">Source code:</h3><p>To install NoGit locally, copy and paste the following source code into a file named <code>nogit.py</code>.</p><pre class="language-python" tabindex="0"><code class="language-python"><span class="token comment">#!/usr/bin/env python</span>
-<span class="token keyword">import</span> sys<span class="token punctuation">,</span> os<span class="token punctuation">,</span> signal<span class="token punctuation">,</span> atexit<span class="token punctuation">,</span> readline<span class="token punctuation">,</span> subprocess
-
-commands<span class="token punctuation">,</span> stop<span class="token punctuation">,</span> history_file <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">False</span><span class="token punctuation">,</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>os<span class="token punctuation">.</span>getcwd<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"nogit.history"</span><span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">run_commands</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-  stop <span class="token operator">=</span> <span class="token boolean">True</span>
-  <span class="token keyword">for</span> cmd <span class="token keyword">in</span> commands<span class="token punctuation">:</span>
-    command <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"git"</span> <span class="token keyword">if</span> <span class="token keyword">not</span> cmd<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"git "</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token string">""</span><span class="token punctuation">]</span>
-    command <span class="token operator">=</span> <span class="token punctuation">[</span>cmd<span class="token punctuation">]</span> <span class="token keyword">if</span> command<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">""</span> <span class="token keyword">else</span> <span class="token punctuation">[</span>command<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cmd<span class="token punctuation">]</span>
-    subprocess<span class="token punctuation">.</span>Popen<span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">.</span>communicate<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    commands <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-
-<span class="token keyword">def</span> <span class="token function">signal_handler</span><span class="token punctuation">(</span>sig<span class="token punctuation">,</span> frame<span class="token punctuation">)</span><span class="token punctuation">:</span>
-  run_commands<span class="token punctuation">(</span><span class="token punctuation">)</span>
-  sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-
-<span class="token keyword">try</span><span class="token punctuation">:</span>
-  readline<span class="token punctuation">.</span>read_history_file<span class="token punctuation">(</span>history_file<span class="token punctuation">)</span>
-  signal<span class="token punctuation">.</span>signal<span class="token punctuation">(</span>signal<span class="token punctuation">.</span>SIGINT<span class="token punctuation">,</span> signal_handler<span class="token punctuation">)</span>
-  <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-    <span class="token keyword">if</span> stop <span class="token operator">==</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-      <span class="token keyword">break</span>
-    command <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"git&gt; "</span><span class="token punctuation">)</span>
-    <span class="token keyword">if</span> command <span class="token operator">==</span> <span class="token string">"%undo"</span><span class="token punctuation">:</span>
-      commands<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token keyword">elif</span> command <span class="token operator">==</span> <span class="token string">"%run"</span><span class="token punctuation">:</span>
-      run_commands<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token keyword">elif</span> command <span class="token operator">==</span> <span class="token string">"%exit"</span><span class="token punctuation">:</span>
-      sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-    <span class="token keyword">else</span><span class="token punctuation">:</span>
-      commands <span class="token operator">+=</span> <span class="token punctuation">[</span>cmd<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> cmd <span class="token keyword">in</span> command<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">";"</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
-  signal<span class="token punctuation">.</span>pause<span class="token punctuation">(</span><span class="token punctuation">)</span>
-  readline<span class="token punctuation">.</span>set_history_length<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token keyword">except</span> IOError<span class="token punctuation">:</span>
-  <span class="token keyword">pass</span>
-
-atexit<span class="token punctuation">.</span>register<span class="token punctuation">(</span>readline<span class="token punctuation">.</span>write_history_file<span class="token punctuation">,</span> history_file<span class="token punctuation">)</span></code></pre></article>
+</code></pre>
