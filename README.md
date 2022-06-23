@@ -1,54 +1,46 @@
-# NoGit
-A simple python script to prevent the unnecessary repetition of the "git" keyword, made in response to [this question](https://stackoverflow.com/q/56505000/10415695) and ported from [this answer](https://stackoverflow.com/a/56528842/10415695).
+<article class="col-12 col-lg-9" id="blog-article"><h3 class="text-title">Information:</h3><p><a href="https://github.com/LogicalBranch/NoGit">NoGit</a> is a Python script that prevents the unnecessary repetition of the git keyword. It opens a shell CLI where you can input git commands without typing the <code>git</code> keyword before every instruction. I wrote this script as <a href="https://stackoverflow.com/a/56528842/10415695">an answer</a> to <a href="https://stackoverflow.com/q/56505000/10415695">a question</a> on StackOverflow.</p><p>After calling ./nogit, a CLI (similar to the <a href="https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-commands.html">MySQL shell</a>) should appear:</p><pre lang="shell">git&gt;
+</pre><p><b>Note</b>: Given that NoGit is a wrapper around Git, it provides all of the features of the <a href="https://git-scm.com/">Git VCS</a>.</p><h3 class="text-title">Documentation:</h3><ul><li><code>%undo</code> deletes the last command from the stack</li><li><code>%run</code> executes all commands in the stack and deletes it when done</li><li><code>%exit</code> closes the CLI without doing anything</li><li><code>ctrl+c</code> has the same effect as  executing <code>%run; %exit</code> or <code>%run</code> and <code>%exit</code></li><li>Command history gets saved to a file called <code>nogit.history</code> in the same folder as the script</li><li>You can add multiple commands in one line using a semi-colon</li><li>You can use the <code>git</code> keyword because the script doesn't add the <code>git</code> keyword if it already exists</li></ul><h3 class="text-title">Demonstration:</h3><ol><li><code>init</code></li><li><code>add -A</code></li><li><code>stage -A</code></li><li><code>status</code></li><li><code>commit -m "initial commit"</code></li><li><code>%run; %exit</code></li></ol><h3 class="text-title">Installation:</h3><p>To run NoGit, you need <a href="https://www.python.org/downloads/">Python 3</a> installed on your system. You can download it from the official <a href="https://github.com/LogicalBranch/NoGit">Github Repository</a> or copy the source code below.</p><p><b>Note</b>: The script depends on the <a href="https://docs.python.org/3/library/sys.html">sys</a>, <a href="https://docs.python.org/3/library/os.html">os</a>, <a href="https://docs.python.org/3/library/signal.html">signal</a>, <a href="https://docs.python.org/3/library/atexit.html">atexit</a>, <a href="https://docs.python.org/3/library/readline.html">readline</a> and <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a> modules.</p><h3 class="text-title">Installation notes (Linux):</h3><p>If you want you can remove the <code>.py</code> extension and convert it into an executable:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">mv</span> nogit.py nogit
+<span class="token function">chmod</span> +x ./nogit
+./nogit <span class="token comment"># open the NoGit CLI</span>
+</code></pre><p>You can also move this script to your <code>./bin/</code> directory and create an alias for it to run it without a <code>./</code>:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">cp</span> ./nogit /bin/nogit
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">"/bin/nogit"</span>
+</code></pre><p>Alternatively you can copy the following command into your CLI:</p><pre class="language-shell" tabindex="0"><code class="language-shell"><span class="token function">sudo</span> <span class="token function">cp</span> ./nogit /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">chmod</span> +x /bin/nogit <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">alias</span> <span class="token assign-left variable">nogit</span><span class="token operator">=</span><span class="token string">'/bin/nogit'</span>
+</code></pre><h3 class="text-title">Source code:</h3><p>To install NoGit locally, copy and paste the following source code into a file named <code>nogit.py</code>.</p><pre class="language-python" tabindex="0"><code class="language-python"><span class="token comment">#!/usr/bin/env python</span>
+<span class="token keyword">import</span> sys<span class="token punctuation">,</span> os<span class="token punctuation">,</span> signal<span class="token punctuation">,</span> atexit<span class="token punctuation">,</span> readline<span class="token punctuation">,</span> subprocess
 
+commands<span class="token punctuation">,</span> stop<span class="token punctuation">,</span> history_file <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">False</span><span class="token punctuation">,</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>os<span class="token punctuation">.</span>getcwd<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"nogit.history"</span><span class="token punctuation">)</span>
 
-### Documentation:
+<span class="token keyword">def</span> <span class="token function">run_commands</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  stop <span class="token operator">=</span> <span class="token boolean">True</span>
+  <span class="token keyword">for</span> cmd <span class="token keyword">in</span> commands<span class="token punctuation">:</span>
+    command <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"git"</span> <span class="token keyword">if</span> <span class="token keyword">not</span> cmd<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"git "</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token string">""</span><span class="token punctuation">]</span>
+    command <span class="token operator">=</span> <span class="token punctuation">[</span>cmd<span class="token punctuation">]</span> <span class="token keyword">if</span> command<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">""</span> <span class="token keyword">else</span> <span class="token punctuation">[</span>command<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cmd<span class="token punctuation">]</span>
+    subprocess<span class="token punctuation">.</span>Popen<span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">.</span>communicate<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    commands <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
 
-  * the `%undo` command removes the last command from the stack
-  * the `%run` command runs the commands in the stack and clears the stack
-  * the `%exit` command closes the CLI without doing anything
-  * pressing `ctr+c` is the same as running `%run; %exit`
-  * the script saves commands that were executed to a file called `git.history` in the same folder as the script
-  * you can add multiple commands in one line using a semi-colon
-  * you can use the keyword `git` in the beginning of the command and the script won't duplicate it (**E.G:** `git init` doesn't become `git git init`)
+<span class="token keyword">def</span> <span class="token function">signal_handler</span><span class="token punctuation">(</span>sig<span class="token punctuation">,</span> frame<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  run_commands<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-### Example commands:
+<span class="token keyword">try</span><span class="token punctuation">:</span>
+  readline<span class="token punctuation">.</span>read_history_file<span class="token punctuation">(</span>history_file<span class="token punctuation">)</span>
+  signal<span class="token punctuation">.</span>signal<span class="token punctuation">(</span>signal<span class="token punctuation">.</span>SIGINT<span class="token punctuation">,</span> signal_handler<span class="token punctuation">)</span>
+  <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> stop <span class="token operator">==</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+      <span class="token keyword">break</span>
+    command <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"git&gt; "</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> command <span class="token operator">==</span> <span class="token string">"%undo"</span><span class="token punctuation">:</span>
+      commands<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">elif</span> command <span class="token operator">==</span> <span class="token string">"%run"</span><span class="token punctuation">:</span>
+      run_commands<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">elif</span> command <span class="token operator">==</span> <span class="token string">"%exit"</span><span class="token punctuation">:</span>
+      sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+      commands <span class="token operator">+=</span> <span class="token punctuation">[</span>cmd<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> cmd <span class="token keyword">in</span> command<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">";"</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+  signal<span class="token punctuation">.</span>pause<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  readline<span class="token punctuation">.</span>set_history_length<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token keyword">except</span> IOError<span class="token punctuation">:</span>
+  <span class="token keyword">pass</span>
 
-  1. `init`
-  2. `add .`
-  3. `stage .`
-  4. `commit -m "inital commit"`
-  5. `%run; %exit`
-
-### Additional information (for Linux users):
-
-If you want you can remove the `.py` extension and convert it into an executable using:
-
-    mv ./git.py ./git
-    chmod +x ./git
-
-Then instead of calling the script like this:
-
-    python3 git.py
-
-You'd run this instead:
-
-    ./git
-
-### Additional information (for lazy people):
-
-If you're lazy and don't want to type out a `./` then you could move this script to your `/bin/` folder and create an alias for it.
-
-If you're *really, __really__* lazy, use the following commands:
-
-    sudo cp ./git /bin/nogit
-    sudo chmod +x /bin/nogit
-    alias nogit='/bin/nogit'
-
-If you're *really, really, __really__* lazy, copy and paste the following one-liner:
-
-    sudo cp ./git /bin/nogit && sudo chmod +x /bin/nogit && alias nogit='/bin/nogit'
-
-If your laziness has reached levels previously unknown to humanity, here is a more compact version of the same one-liner:
-
-    sudo cp ./git /bin/nogit;sudo chmod +x /bin/nogit;alias nogit='/bin/nogit'
+atexit<span class="token punctuation">.</span>register<span class="token punctuation">(</span>readline<span class="token punctuation">.</span>write_history_file<span class="token punctuation">,</span> history_file<span class="token punctuation">)</span></code></pre></article>
