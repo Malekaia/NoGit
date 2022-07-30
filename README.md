@@ -17,7 +17,7 @@
 6. `%run; %exit`
 
 ## Installation:
-To run NoGit, you need <a href="https://www.python.org/downloads/">Python 3</a> installed on your system. You can download it from the official <a href="https://github.com/LogicalBranch/NoGit">Github Repository</a> or copy the source code below.
+To run NoGit, you need <a href="https://www.python.org/downloads/">Python 3</a> installed on your system. You can download it from the official <a href="https://github.com/Malekaia/NoGit">Github Repository</a> or copy the source code below.
 
 **Note**: The script depends on the <a href="https://docs.python.org/3/library/sys.html">sys</a>, <a href="https://docs.python.org/3/library/os.html">os</a>, <a href="https://docs.python.org/3/library/signal.html">signal</a>, <a href="https://docs.python.org/3/library/atexit.html">atexit</a>, <a href="https://docs.python.org/3/library/readline.html">readline</a> and <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a> modules.
 
@@ -43,6 +43,3 @@ Alternatively you can copy the following command into your CLI:
 ```shell
 git /bin/nogit && sudo chmod +x /bin/nogit && alias nogit='/bin/nogit'
 ```
-
-## More information:
-You can find the full article at [How to avoid retyping the "Git" keyword](https://logicalbranch.github.io/articles/Git/how-to-avoid-retyping-the-git-keyword.html), and the source code at [nogit.py](https://github.com/LogicalBranch/NoGit/blob/master/nogit.py).
